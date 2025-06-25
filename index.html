@@ -1,0 +1,937 @@
+
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Αποφυγή Συχνών Λαθών - Διαδραστική Προσομοίωση</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .chart-container {
+            position: relative;
+            min-height: 250px;
+            max-height: 400px;
+            margin-bottom: 1rem;
+        }
+        
+        .highlight-correct {
+            background-color: rgba(34, 197, 94, 0.2);
+            border: 1px solid rgb(34, 197, 94);
+        }
+        
+        .highlight-incorrect {
+            background-color: rgba(239, 68, 68, 0.2);
+            border: 1px solid rgb(239, 68, 68);
+        }
+        
+        .highlight-neutral {
+            background-color: rgba(59, 130, 246, 0.2);
+            border: 1px solid rgb(59, 130, 246);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+    <header class="bg-blue-700 text-white py-6 shadow-md">
+        <div class="container mx-auto px-4">
+            <h1 class="text-3xl font-bold">Αποφυγή Συχνών Λαθών στην Αναγνώριση PII</h1>
+            <p class="mt-2 text-blue-100">Διαδραστική προσομοίωση για την κατανόηση και αποφυγή συχνών λαθών στην αναγνώριση προσωπικών δεδομένων</p>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-8">
+        <section class="mb-12 bg-white p-6 rounded-lg shadow-md">
+            <h2 class="text-2xl font-semibold mb-4">Τι θα μάθετε</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-blue-50 p-4 rounded-md border border-blue-200">
+                    <h3 class="text-lg font-medium text-blue-700 mb-2">Στόχος 1</h3>
+                    <p>Να διασφαλίσετε ότι δεν παραβλέπονται προσωπικά δεδομένα (PII) κατά την αναγνώριση.</p>
+                </div>
+                <div class="bg-blue-50 p-4 rounded-md border border-blue-200">
+                    <h3 class="text-lg font-medium text-blue-700 mb-2">Στόχος 2</h3>
+                    <p>Να κατηγοριοποιείτε σωστά τα προσωπικά δεδομένα για κατάλληλο χειρισμό και ανάλυση.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-12 bg-white p-6 rounded-lg shadow-md">
+            <h2 class="text-2xl font-semibold mb-4">Συχνά Λάθη στην Αναγνώριση PII</h2>
+            <p class="mb-6">Παρακάτω βλέπετε τις κατηγορίες όπου παρατηρήθηκαν τα περισσότερα λάθη κατά τη Φάση II:</p>
+            
+            <div class="chart-container">
+                <canvas id="errorChart"></canvas>
+            </div>
+            
+            <div class="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-4">
+                <div class="bg-gray-50 p-4 rounded-md border border-gray-200">
+                    <h3 class="text-lg font-medium text-gray-700 mb-2">Γιατί συμβαίνουν αυτά τα λάθη;</h3>
+                    <ul class="list-disc pl-5 space-y-2">
+                        <li>Ελλιπής κατανόηση των κριτηρίων κατηγοριοποίησης</li>
+                        <li>Παράβλεψη συμφραζομένων που υποδηλώνουν PII</li>
+                        <li>Λανθασμένη ερμηνεία των οδηγιών επισημείωσης</li>
+                        <li>Ασυνέπεια στην εφαρμογή των κανόνων</li>
+                        <li>Δυσκολία στην αναγνώριση έμμεσων αναφορών σε PII</li>
+                    </ul>
+                </div>
+                <div class="bg-gray-50 p-4 rounded-md border border-gray-200">
+                    <h3 class="text-lg font-medium text-gray-700 mb-2">Επιπτώσεις των λαθών</h3>
+                    <ul class="list-disc pl-5 space-y-2">
+                        <li>Παραβίαση προστασίας προσωπικών δεδομένων</li>
+                        <li>Ανακριβή αποτελέσματα ανάλυσης</li>
+                        <li>Λανθασμένη κατηγοριοποίηση περιεχομένου</li>
+                        <li>Αυξημένος χρόνος επανεξέτασης και διόρθωσης</li>
+                        <li>Μειωμένη αποτελεσματικότητα των συστημάτων προστασίας</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-12">
+            <div class="bg-yellow-50 p-6 rounded-lg shadow-md border-l-4 border-yellow-500">
+                <h2 class="text-2xl font-semibold mb-4 text-yellow-800">Ας εξερευνήσουμε!</h2>
+                <p class="text-yellow-700 mb-4">Πόσο καλά μπορείτε να αναγνωρίσετε και να κατηγοριοποιήσετε τα προσωπικά δεδομένα σε διάφορες περιπτώσεις; Δοκιμάστε την προσομοίωση παρακάτω για να βελτιώσετε τις δεξιότητές σας!</p>
+            </div>
+        </section>
+
+        <section class="mb-12">
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-2xl font-semibold mb-6">Προσομοίωση Αναγνώρισης PII</h2>
+                
+                <div class="mb-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-medium">Επιλέξτε Κατηγορία:</h3>
+                        <div class="flex space-x-2">
+                            <button id="prevScenario" class="px-3 py-1 bg-gray-200 rounded-md hover:bg-gray-300 transition">Προηγούμενο</button>
+                            <button id="nextScenario" class="px-3 py-1 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition">Επόμενο</button>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2 mb-4">
+                        <button class="category-btn px-3 py-2 bg-blue-100 rounded-md hover:bg-blue-200 transition" data-category="names">Ονόματα</button>
+                        <button class="category-btn px-3 py-2 bg-blue-100 rounded-md hover:bg-blue-200 transition" data-category="location">Τοποθεσία</button>
+                        <button class="category-btn px-3 py-2 bg-blue-100 rounded-md hover:bg-blue-200 transition" data-category="faith">Θρησκεία</button>
+                        <button class="category-btn px-3 py-2 bg-blue-100 rounded-md hover:bg-blue-200 transition" data-category="product">Αναγνωριστικά Προϊόντων</button>
+                        <button class="category-btn px-3 py-2 bg-blue-100 rounded-md hover:bg-blue-200 transition" data-category="parental">Γονική Κατάσταση</button>
+                        <button class="category-btn px-3 py-2 bg-blue-100 rounded-md hover:bg-blue-200 transition" data-category="marital">Οικογενειακή Κατάσταση</button>
+                        <button class="category-btn px-3 py-2 bg-blue-100 rounded-md hover:bg-blue-200 transition" data-category="employment">Εργασιακές Πληροφορίες</button>
+                        <button class="category-btn px-3 py-2 bg-blue-100 rounded-md hover:bg-blue-200 transition" data-category="interests">Προσωπικά Ενδιαφέροντα</button>
+                        <button class="category-btn px-3 py-2 bg-blue-100 rounded-md hover:bg-blue-200 transition" data-category="age">Ηλικία</button>
+                        <button class="category-btn px-3 py-2 bg-blue-100 rounded-md hover:bg-blue-200 transition" data-category="rejections">Απορρίψεις</button>
+                    </div>
+                </div>
+                
+                <div id="scenarioContainer" class="mb-6 p-4 bg-gray-50 rounded-md border border-gray-200 min-h-[200px]">
+                    <p class="text-gray-500 text-center">Επιλέξτε μια κατηγορία για να ξεκινήσετε</p>
+                </div>
+                
+                <div id="taggingInterface" class="hidden mb-6">
+                    <h3 class="text-lg font-medium mb-2">Επιλέξτε τα PII στο κείμενο:</h3>
+                    <div id="taggableText" class="p-4 bg-white rounded-md border border-gray-300 mb-4"></div>
+                    
+                    <div class="flex flex-wrap gap-2 mb-4">
+                        <button id="tagAsName" class="px-3 py-1 bg-purple-100 rounded-md hover:bg-purple-200 transition">Όνομα</button>
+                        <button id="tagAsLocation" class="px-3 py-1 bg-green-100 rounded-md hover:bg-green-200 transition">Τοποθεσία</button>
+                        <button id="tagAsFaith" class="px-3 py-1 bg-yellow-100 rounded-md hover:bg-yellow-200 transition">Θρησκεία</button>
+                        <button id="tagAsProduct" class="px-3 py-1 bg-red-100 rounded-md hover:bg-red-200 transition">Αναγνωριστικό Προϊόντος</button>
+                        <button id="tagAsParental" class="px-3 py-1 bg-blue-100 rounded-md hover:bg-blue-200 transition">Γονική Κατάσταση</button>
+                        <button id="tagAsMarital" class="px-3 py-1 bg-pink-100 rounded-md hover:bg-pink-200 transition">Οικογενειακή Κατάσταση</button>
+                        <button id="tagAsEmployment" class="px-3 py-1 bg-indigo-100 rounded-md hover:bg-indigo-200 transition">Εργασιακή Πληροφορία</button>
+                        <button id="tagAsInterest" class="px-3 py-1 bg-orange-100 rounded-md hover:bg-orange-200 transition">Προσωπικό Ενδιαφέρον</button>
+                        <button id="tagAsAge" class="px-3 py-1 bg-teal-100 rounded-md hover:bg-teal-200 transition">Ηλικία</button>
+                        <button id="tagAsRejection" class="px-3 py-1 bg-gray-100 rounded-md hover:bg-gray-200 transition">Απόρριψη</button>
+                        <button id="clearSelection" class="px-3 py-1 bg-gray-200 rounded-md hover:bg-gray-300 transition">Καθαρισμός</button>
+                    </div>
+                    
+                    <button id="checkAnswer" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition">Έλεγχος Απάντησης</button>
+                </div>
+                
+                <div id="feedbackContainer" class="hidden p-4 rounded-md mb-6"></div>
+                
+                <div id="explanationContainer" class="hidden p-4 bg-blue-50 rounded-md border border-blue-200">
+                    <h3 class="text-lg font-medium text-blue-700 mb-2">Επεξήγηση:</h3>
+                    <div id="explanationText"></div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="mb-12">
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-2xl font-semibold mb-6">Η Πρόοδός Σας</h2>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div>
+                        <h3 class="text-lg font-medium mb-4">Επίδοση ανά Κατηγορία</h3>
+                        <div class="chart-container">
+                            <canvas id="performanceChart"></canvas>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-medium mb-4">Συνολική Πρόοδος</h3>
+                        <div class="chart-container">
+                            <canvas id="progressChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="mb-12">
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-2xl font-semibold mb-4">Βέλτιστες Πρακτικές για Αποφυγή Λαθών</h2>
+                
+                <div class="mb-6">
+                    <h3 class="text-lg font-medium mb-2">Γενικές Βέλτιστες Πρακτικές</h3>
+                    <ul class="list-disc pl-5 space-y-2">
+                        <li>Εξετάστε προσεκτικά το πλήρες πλαίσιο μιας ανάρτησης πριν την επισημείωση</li>
+                        <li>Βεβαιωθείτε ότι οι επισημειώσεις καλύπτουν το πλήρες εύρος των σχετικών πληροφοριών</li>
+                        <li>Χρησιμοποιήστε κύκλους ανατροφοδότησης για να εντοπίσετε επαναλαμβανόμενα μοτίβα σφαλμάτων</li>
+                        <li>Σε περίπτωση αμφιβολίας, επισημάνετε την πληροφορία για αποφυγή ψευδώς αρνητικών αποτελεσμάτων</li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-medium mb-2">Ειδικές Πρακτικές ανά Κατηγορία</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="p-3 bg-gray-50 rounded-md border border-gray-200">
+                            <h4 class="font-medium text-gray-700">Ονόματα</h4>
+                            <ul class="list-disc pl-5 text-sm">
+                                <li>Συμπεριλάβετε τίτλους, επιθήματα και προσφωνήσεις</li>
+                                <li>Αξιοποιήστε δομικά στοιχεία κειμένου (π.χ. "Γεια σου Μαρία")</li>
+                                <li>Συμπεριλάβετε ονόματα γνωστών προσώπων</li>
+                            </ul>
+                        </div>
+                        <div class="p-3 bg-gray-50 rounded-md border border-gray-200">
+                            <h4 class="font-medium text-gray-700">Τοποθεσία</h4>
+                            <ul class="list-disc pl-5 text-sm">
+                                <li>Επισημάνετε πλήρεις πληροφορίες τοποθεσίας</li>
+                                <li>Συμπεριλάβετε τοποθεσίες σε διαφημίσεις μικρών επιχειρήσεων</li>
+                                <li>Επισημάνετε τοποθεσίες εκδηλώσεων για δημόσια πρόσωπα</li>
+                            </ul>
+                        </div>
+                        <div class="p-3 bg-gray-50 rounded-md border border-gray-200">
+                            <h4 class="font-medium text-gray-700">Θρησκεία</h4>
+                            <ul class="list-disc pl-5 text-sm">
+                                <li>Επισημάνετε ρητές αναφορές σε θρησκευτικές πρακτικές</li>
+                                <li>Συμπεριλάβετε λεπτομερείς επικλήσεις ή ευλογίες</li>
+                                <li>Αναγνωρίστε παραθέσεις θρησκευτικών κειμένων με προσωπικό πλαίσιο</li>
+                            </ul>
+                        </div>
+                        <div class="p-3 bg-gray-50 rounded-md border border-gray-200">
+                            <h4 class="font-medium text-gray-700">Εργασιακές Πληροφορίες</h4>
+                            <ul class="list-disc pl-5 text-sm">
+                                <li>Επισημάνετε επιχειρηματικά δεδομένα που αποκαλύπτουν το επάγγελμα του συγγραφέα</li>
+                                <li>Συμπεριλάβετε επαγγελματικούς ρόλους σε προσωπικές αναρτήσεις</li>
+                                <li>Αποφύγετε την εσφαλμένη κατηγοριοποίηση επιχειρήσεων</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-gray-800 text-white py-6">
+        <div class="container mx-auto px-4 text-center">
+            <p>© 2023 Προσομοίωση Αποφυγής Συχνών Λαθών στην Αναγνώριση PII</p>
+        </div>
+    </footer>
+
+    <script>
+        // Προσπαθούμε να αποφύγουμε σφάλματα με αμυντικό προγραμματισμό
+        try {
+            // Δεδομένα σεναρίων για κάθε κατηγορία
+            const scenarios = {
+                names: [
+                    {
+                        text: "Γεια σου Δρ. Γεώργιε Παπαδόπουλε! Ευχαριστώ για την παρουσίασή σας χθες στο συνέδριο.",
+                        pii: [{ start: 9, end: 33, type: "name" }],
+                        explanation: "Το πλήρες όνομα με τίτλο (Δρ. Γεώργιε Παπαδόπουλε) πρέπει να επισημανθεί ως PII. Συμπεριλάβετε πάντα τίτλους και προσφωνήσεις με τα ονόματα."
+                    },
+                    {
+                        text: "Η Μαρία μου είπε ότι ο Κώστας θα έρθει αύριο στη συνάντηση.",
+                        pii: [
+                            { start: 2, end: 7, type: "name" },
+                            { start: 24, end: 30, type: "name" }
+                        ],
+                        explanation: "Και τα δύο ονόματα (Μαρία και Κώστας) πρέπει να επισημανθούν ως PII, καθώς αναφέρονται σε συγκεκριμένα άτομα."
+                    }
+                ],
+                location: [
+                    {
+                        text: "Θα συναντηθούμε στην οδό Ερμού 45, Αθήνα 10563, δίπλα στο καφέ 'Απόλλων'.",
+                        pii: [{ start: 22, end: 47, type: "location" }],
+                        explanation: "Η πλήρης διεύθυνση (οδό Ερμού 45, Αθήνα 10563) πρέπει να επισημανθεί ως τοποθεσία PII. Περιλαμβάνει οδό, αριθμό, πόλη και ταχυδρομικό κώδικα."
+                    },
+                    {
+                        text: "Το νέο μας κατάστημα στη Θεσσαλονίκη άνοιξε! Επισκεφθείτε μας στην Τσιμισκή 78. #ΝέοΚατάστημα #Θεσσαλονίκη",
+                        pii: [
+                            { start: 22, end: 33, type: "location" },
+                            { start: 65, end: 76, type: "location" }
+                        ],
+                        explanation: "Και η πόλη (Θεσσαλονίκη) και η διεύθυνση (Τσιμισκή 78) πρέπει να επισημανθούν ως τοποθεσίες PII. Σε διαφημίσεις μικρών επιχειρήσεων, οι τοποθεσίες πρέπει να επισημαίνονται, ειδικά όταν συνοδεύονται από hashtags."
+                    }
+                ],
+                faith: [
+                    {
+                        text: "Κάθε Κυριακή πηγαίνω στην εκκλησία του Αγίου Νικολάου για προσευχή και περισυλλογή.",
+                        pii: [{ start: 0, end: 85, type: "faith" }],
+                        explanation: "Ολόκληρη η πρόταση περιγράφει μια θρησκευτική πρακτική (τακτική επίσκεψη στην εκκλησία για προσευχή) και πρέπει να επισημανθεί ως PII θρησκείας."
+                    },
+                    {
+                        text: "Καλημέρα! Ο Θεός να σε ευλογεί σήμερα και πάντα.",
+                        pii: [{ start: 11, end: 45, type: "faith" }],
+                        explanation: "Η φράση 'Ο Θεός να σε ευλογεί σήμερα και πάντα' είναι μια λεπτομερής ευλογία που πρέπει να επισημανθεί ως PII θρησκείας."
+                    }
+                ],
+                product: [
+                    {
+                        text: "Μόλις αγόρασα το νέο iPhone 13 Pro και είμαι πολύ ευχαριστημένος με την απόδοσή του!",
+                        pii: [{ start: 19, end: 31, type: "product" }],
+                        explanation: "Το 'iPhone 13 Pro' είναι ένα συγκεκριμένο αναγνωριστικό προϊόντος και πρέπει να επισημανθεί ως PII."
+                    },
+                    {
+                        text: "Χρησιμοποιώ το Instagram και το WhatsApp καθημερινά για επικοινωνία με φίλους και οικογένεια.",
+                        pii: [
+                            { start: 15, end: 24, type: "product" },
+                            { start: 33, end: 41, type: "product" }
+                        ],
+                        explanation: "Τόσο το 'Instagram' όσο και το 'WhatsApp' είναι αναγνωριστικά προϊόντων Meta και πρέπει να επισημανθούν ως PII."
+                    }
+                ],
+                parental: [
+                    {
+                        text: "Είμαι τόσο περήφανος για τον γιο μου Νίκο που πήρε άριστα στις εξετάσεις του!",
+                        pii: [
+                            { start: 0, end: 37, type: "parental" },
+                            { start: 38, end: 42, type: "name" }
+                        ],
+                        explanation: "Η φράση 'Είμαι τόσο περήφανος για τον γιο μου' δείχνει γονική κατάσταση και πρέπει να επισημανθεί ως PII. Επίσης, το 'Νίκο' είναι όνομα και πρέπει να επισημανθεί ξεχωριστά."
+                    },
+                    {
+                        text: "Η Ελένη και τα δύο παιδιά της, ο Γιάννης και η Μαρία, ήρθαν χθες για επίσκεψη.",
+                        pii: [
+                            { start: 2, end: 7, type: "name" },
+                            { start: 12, end: 29, type: "parental" },
+                            { start: 33, end: 40, type: "name" },
+                            { start: 48, end: 53, type: "name" }
+                        ],
+                        explanation: "Η φράση 'τα δύο παιδιά της' δείχνει γονική κατάσταση και πρέπει να επισημανθεί. Τα ονόματα 'Ελένη', 'Γιάννης' και 'Μαρία' πρέπει να επισημανθούν ξεχωριστά ως ονόματα."
+                    }
+                ],
+                marital: [
+                    {
+                        text: "Ο σύζυγός μου Δημήτρης και εγώ γιορτάζουμε 10 χρόνια γάμου σήμερα!",
+                        pii: [
+                            { start: 0, end: 14, type: "marital" },
+                            { start: 15, end: 23, type: "name" },
+                            { start: 38, end: 57, type: "marital" }
+                        ],
+                        explanation: "Οι φράσεις 'Ο σύζυγός μου' και '10 χρόνια γάμου' δείχνουν οικογενειακή κατάσταση και πρέπει να επισημανθούν. Το 'Δημήτρης' είναι όνομα και πρέπει να επισημανθεί ξεχωριστά."
+                    },
+                    {
+                        text: "Μετά από 5 χρόνια σχέσης, επιτέλους αρραβωνιαστήκαμε χθες!",
+                        pii: [
+                            { start: 0, end: 22, type: "marital" },
+                            { start: 33, end: 52, type: "marital" }
+                        ],
+                        explanation: "Οι φράσεις '5 χρόνια σχέσης' και 'αρραβωνιαστήκαμε' δείχνουν οικογενειακή κατάσταση και πρέπει να επισημανθούν ως PII."
+                    }
+                ],
+                employment: [
+                    {
+                        text: "Εργάζομαι ως αρχιτέκτονας στην εταιρεία 'Κτίρια & Σχεδιασμός' τα τελευταία 7 χρόνια.",
+                        pii: [
+                            { start: 0, end: 22, type: "employment" },
+                            { start: 27, end: 51, type: "employment" },
+                            { start: 52, end: 74, type: "employment" }
+                        ],
+                        explanation: "Η φράση 'Εργάζομαι ως αρχιτέκτονας' δείχνει επαγγελματικό ρόλο, το 'στην εταιρεία 'Κτίρια & Σχεδιασμός'' είναι ο εργοδότης, και 'τα τελευταία 7 χρόνια' δείχνει διάρκεια απασχόλησης. Όλα πρέπει να επισημανθούν ως εργασιακές πληροφορίες."
+                    },
+                    {
+                        text: "Η Άννα μόλις προήχθη σε Διευθύντρια Μάρκετινγκ στην Alpha Technologies.",
+                        pii: [
+                            { start: 2, end: 6, type: "name" },
+                            { start: 13, end: 21, type: "employment" },
+                            { start: 25, end: 47, type: "employment" },
+                            { start: 52, end: 70, type: "employment" }
+                        ],
+                        explanation: "Το 'Άννα' είναι όνομα. Οι φράσεις 'προήχθη', 'Διευθύντρια Μάρκετινγκ' και 'Alpha Technologies' είναι εργασιακές πληροφορίες που πρέπει να επισημανθούν."
+                    }
+                ],
+                interests: [
+                    {
+                        text: "Είμαι παθιασμένος συλλέκτης γραμματοσήμων και έχω πάνω από 1000 στη συλλογή μου! #Φιλοτελισμός",
+                        pii: [{ start: 0, end: 81, type: "interest" }],
+                        explanation: "Ολόκληρη η πρόταση δείχνει ένα ισχυρό προσωπικό ενδιαφέρον (συλλογή γραμματοσήμων) και πρέπει να επισημανθεί ως PII προσωπικού ενδιαφέροντος."
+                    },
+                    {
+                        text: "Λατρεύω το ποδόσφαιρο και είμαι φανατικός οπαδός του Παναθηναϊκού εδώ και 20 χρόνια! #PANATHINAIKOS",
+                        pii: [
+                            { start: 0, end: 18, type: "interest" },
+                            { start: 31, end: 74, type: "interest" }
+                        ],
+                        explanation: "Οι φράσεις 'Λατρεύω το ποδόσφαιρο' και 'είμαι φανατικός οπαδός του Παναθηναϊκού εδώ και 20 χρόνια' δείχνουν προσωπικά ενδιαφέροντα και πρέπει να επισημανθούν."
+                    }
+                ],
+                age: [
+                    {
+                        text: "Σήμερα γιορτάζω τα 35α γενέθλιά μου με φίλους και οικογένεια!",
+                        pii: [{ start: 18, end: 36, type: "age" }],
+                        explanation: "Η φράση 'τα 35α γενέθλιά μου' περιέχει αριθμητική ηλικία και πρέπει να επισημανθεί ως PII ηλικίας."
+                    },
+                    {
+                        text: "Ο γιος μου έγινε δεκαπέντε χρονών σήμερα. Πώς μεγάλωσε τόσο γρήγορα;",
+                        pii: [
+                            { start: 0, end: 10, type: "parental" },
+                            { start: 17, end: 40, type: "age" }
+                        ],
+                        explanation: "Η φράση 'Ο γιος μου' δείχνει γονική κατάσταση και η φράση 'έγινε δεκαπέντε χρονών' περιέχει ηλικία γραμμένη με λέξεις και πρέπει να επισημανθεί ως PII ηλικίας."
+                    }
+                ],
+                rejections: [
+                    {
+                        text: "Δυστυχώς, η αίτησή μου για το μεταπτυχιακό πρόγραμμα στο Πανεπιστήμιο Αθηνών απορρίφθηκε.",
+                        pii: [
+                            { start: 11, end: 22, type: "rejection" },
+                            { start: 27, end: 95, type: "rejection" }
+                        ],
+                        explanation: "Οι φράσεις 'η αίτησή μου' και 'για το μεταπτυχιακό πρόγραμμα στο Πανεπιστήμιο Αθηνών απορρίφθηκε' δείχνουν μια απόρριψη και πρέπει να επισημανθούν ως PII."
+                    },
+                    {
+                        text: "Μετά από τρεις συνεντεύξεις, η εταιρεία XYZ αποφάσισε να μην προχωρήσει με την πρόσληψή μου.",
+                        pii: [
+                            { start: 0, end: 28, type: "rejection" },
+                            { start: 32, end: 43, type: "employment" },
+                            { start: 44, end: 93, type: "rejection" }
+                        ],
+                        explanation: "Οι φράσεις 'Μετά από τρεις συνεντεύξεις' και 'αποφάσισε να μην προχωρήσει με την πρόσληψή μου' δείχνουν μια επαγγελματική απόρριψη. Το 'εταιρεία XYZ' είναι εργασιακή πληροφορία."
+                    }
+                ]
+            };
+
+            // Αρχικοποίηση μεταβλητών κατάστασης
+            let currentCategory = null;
+            let currentScenarioIndex = 0;
+            let selectedText = "";
+            let selectedStart = -1;
+            let selectedEnd = -1;
+            let userTags = [];
+            let performanceData = {
+                names: { correct: 0, total: 0 },
+                location: { correct: 0, total: 0 },
+                faith: { correct: 0, total: 0 },
+                product: { correct: 0, total: 0 },
+                parental: { correct: 0, total: 0 },
+                marital: { correct: 0, total: 0 },
+                employment: { correct: 0, total: 0 },
+                interests: { correct: 0, total: 0 },
+                age: { correct: 0, total: 0 },
+                rejections: { correct: 0, total: 0 }
+            };
+            let totalScenarios = 0;
+            let completedScenarios = 0;
+
+            // Αρχικοποίηση γραφημάτων
+            function initializeCharts() {
+                try {
+                    // Γράφημα συχνών λαθών
+                    const errorCtx = document.getElementById('errorChart').getContext('2d');
+                    const errorData = {
+                        labels: ['Ονόματα', 'Τοποθεσία', 'Θρησκεία', 'Αναγν. Προϊόντων', 'Γονική Κατάσταση', 
+                                'Οικογ. Κατάσταση', 'Εργασιακές Πληρ.', 'Προσωπικά Ενδ.', 'Ηλικία', 'Απορρίψεις'],
+                        datasets: [{
+                            label: 'Συχνότητα Λαθών (%)',
+                            data: [68, 62, 57, 55, 52, 48, 45, 42, 38, 35],
+                            backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                            borderColor: 'rgb(255, 99, 132)',
+                            borderWidth: 1
+                        }]
+                    };
+                    
+                    new Chart(errorCtx, {
+                        type: 'bar',
+                        data: errorData,
+                        options: {
+                            maintainAspectRatio: false,
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    max: 100,
+                                    title: {
+                                        display: true,
+                                        text: 'Ποσοστό Λαθών (%)'
+                                    }
+                                }
+                            }
+                        }
+                    });
+
+                    // Γράφημα επίδοσης
+                    const performanceCtx = document.getElementById('performanceChart').getContext('2d');
+                    const performanceData = {
+                        labels: ['Ονόματα', 'Τοποθεσία', 'Θρησκεία', 'Αναγν. Προϊόντων', 'Γονική Κατάσταση', 
+                                'Οικογ. Κατάσταση', 'Εργασιακές Πληρ.', 'Προσωπικά Ενδ.', 'Ηλικία', 'Απορρίψεις'],
+                        datasets: [{
+                            label: 'Ποσοστό Επιτυχίας (%)',
+                            data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                            backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                            borderColor: 'rgb(54, 162, 235)',
+                            borderWidth: 1
+                        }]
+                    };
+                    
+                    window.performanceChart = new Chart(performanceCtx, {
+                        type: 'bar',
+                        data: performanceData,
+                        options: {
+                            maintainAspectRatio: false,
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    max: 100,
+                                    title: {
+                                        display: true,
+                                        text: 'Ποσοστό Επιτυχίας (%)'
+                                    }
+                                }
+                            }
+                        }
+                    });
+
+                    // Γράφημα προόδου
+                    const progressCtx = document.getElementById('progressChart').getContext('2d');
+                    const progressData = {
+                        labels: ['Ολοκληρωμένα', 'Απομένουν'],
+                        datasets: [{
+                            data: [0, 100],
+                            backgroundColor: [
+                                'rgba(75, 192, 192, 0.5)',
+                                'rgba(201, 203, 207, 0.5)'
+                            ],
+                            borderColor: [
+                                'rgb(75, 192, 192)',
+                                'rgb(201, 203, 207)'
+                            ],
+                            borderWidth: 1
+                        }]
+                    };
+                    
+                    window.progressChart = new Chart(progressCtx, {
+                        type: 'doughnut',
+                        data: progressData,
+                        options: {
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    position: 'bottom'
+                                }
+                            }
+                        }
+                    });
+                } catch (error) {
+                    console.error("Σφάλμα κατά την αρχικοποίηση των γραφημάτων:", error);
+                }
+            }
+
+            // Υπολογισμός συνολικών σεναρίων
+            function calculateTotalScenarios() {
+                try {
+                    totalScenarios = 0;
+                    for (const category in scenarios) {
+                        if (Array.isArray(scenarios[category])) {
+                            totalScenarios += scenarios[category].length;
+                        }
+                    }
+                    return totalScenarios;
+                } catch (error) {
+                    console.error("Σφάλμα κατά τον υπολογισμό συνολικών σεναρίων:", error);
+                    return 0;
+                }
+            }
+
+            // Ενημέρωση γραφήματος προόδου
+            function updateProgressChart() {
+                try {
+                    if (window.progressChart && typeof window.progressChart.data !== 'undefined') {
+                        const percentage = (completedScenarios / totalScenarios) * 100;
+                        window.progressChart.data.datasets[0].data = [completedScenarios, totalScenarios - completedScenarios];
+                        window.progressChart.update();
+                    }
+                } catch (error) {
+                    console.error("Σφάλμα κατά την ενημέρωση του γραφήματος προόδου:", error);
+                }
+            }
+
+            // Ενημέρωση γραφήματος επίδοσης
+            function updatePerformanceChart() {
+                try {
+                    if (window.performanceChart && typeof window.performanceChart.data !== 'undefined') {
+                        const categories = ['names', 'location', 'faith', 'product', 'parental', 'marital', 'employment', 'interests', 'age', 'rejections'];
+                        const performanceValues = categories.map(category => {
+                            if (performanceData[category].total > 0) {
+                                return (performanceData[category].correct / performanceData[category].total) * 100;
+                            }
+                            return 0;
+                        });
+                        
+                        window.performanceChart.data.datasets[0].data = performanceValues;
+                        window.performanceChart.update();
+                    }
+                } catch (error) {
+                    console.error("Σφάλμα κατά την ενημέρωση του γραφήματος επίδοσης:", error);
+                }
+            }
+
+            // Φόρτωση σεναρίου
+            function loadScenario(category, index) {
+                try {
+                    if (!scenarios[category] || !Array.isArray(scenarios[category]) || index >= scenarios[category].length) {
+                        console.error("Μη έγκυρη κατηγορία ή δείκτης σεναρίου");
+                        return;
+                    }
+                    
+                    const scenario = scenarios[category][index];
+                    const scenarioContainer = document.getElementById('scenarioContainer');
+                    const taggingInterface = document.getElementById('taggingInterface');
+                    const taggableText = document.getElementById('taggableText');
+                    const feedbackContainer = document.getElementById('feedbackContainer');
+                    const explanationContainer = document.getElementById('explanationContainer');
+                    
+                    // Καθαρισμός προηγούμενων δεδομένων
+                    userTags = [];
+                    selectedText = "";
+                    selectedStart = -1;
+                    selectedEnd = -1;
+                    
+                    // Εμφάνιση σεναρίου
+                    scenarioContainer.innerHTML = `<p class="mb-2 font-medium">Σενάριο ${index + 1}/${scenarios[category].length}:</p><p>${scenario.text}</p>`;
+                    taggableText.innerHTML = scenario.text;
+                    taggingInterface.classList.remove('hidden');
+                    feedbackContainer.classList.add('hidden');
+                    explanationContainer.classList.add('hidden');
+                    
+                    // Προσθήκη event listener για επιλογή κειμένου
+                    taggableText.addEventListener('mouseup', handleTextSelection);
+                } catch (error) {
+                    console.error("Σφάλμα κατά τη φόρτωση σεναρίου:", error);
+                }
+            }
+
+            // Χειρισμός επιλογής κειμένου
+            function handleTextSelection() {
+                try {
+                    const selection = window.getSelection();
+                    if (selection.toString().trim() !== '') {
+                        const range = selection.getRangeAt(0);
+                        const startNode = range.startContainer;
+                        const endNode = range.endContainer;
+                        
+                        if (startNode.parentNode === taggableText && endNode.parentNode === taggableText) {
+                            selectedText = selection.toString();
+                            selectedStart = range.startOffset;
+                            selectedEnd = range.endOffset;
+                            
+                            // Αν το startNode είναι διαφορετικό από το taggableText (π.χ. είναι ένα παιδί του)
+                            if (startNode !== taggableText.firstChild) {
+                                // Υπολογισμός του συνολικού offset
+                                let currentNode = taggableText.firstChild;
+                                let offset = 0;
+                                while (currentNode !== startNode) {
+                                    if (currentNode.textContent) {
+                                        offset += currentNode.textContent.length;
+                                    }
+                                    currentNode = currentNode.nextSibling;
+                                }
+                                selectedStart += offset;
+                                selectedEnd += offset;
+                            }
+                        }
+                    }
+                } catch (error) {
+                    console.error("Σφάλμα κατά την επιλογή κειμένου:", error);
+                }
+            }
+
+            // Προσθήκη ετικέτας
+            function addTag(type) {
+                try {
+                    if (selectedText && selectedStart >= 0 && selectedEnd > selectedStart) {
+                        userTags.push({
+                            start: selectedStart,
+                            end: selectedEnd,
+                            type: type,
+                            text: selectedText
+                        });
+                        
+                        // Ενημέρωση του UI για να δείξει την ετικέτα
+                        updateTaggableText();
+                        
+                        // Καθαρισμός επιλογής
+                        selectedText = "";
+                        selectedStart = -1;
+                        selectedEnd = -1;
+                    } else {
+                        alert("Παρακαλώ επιλέξτε πρώτα κείμενο για επισήμανση.");
+                    }
+                } catch (error) {
+                    console.error("Σφάλμα κατά την προσθήκη ετικέτας:", error);
+                }
+            }
+
+            // Ενημέρωση του κειμένου με ετικέτες
+            function updateTaggableText() {
+                try {
+                    if (!currentCategory || currentScenarioIndex >= scenarios[currentCategory].length) {
+                        return;
+                    }
+                    
+                    const scenario = scenarios[currentCategory][currentScenarioIndex];
+                    let text = scenario.text;
+                    let html = '';
+                    let lastIndex = 0;
+                    
+                    // Ταξινόμηση των ετικετών με βάση το σημείο έναρξης
+                    const sortedTags = [...userTags].sort((a, b) => a.start - b.start);
+                    
+                    // Δημιουργία HTML με επισημασμένες περιοχές
+                    for (const tag of sortedTags) {
+                        // Προσθήκη μη επισημασμένου κειμένου πριν την ετικέτα
+                        html += text.substring(lastIndex, tag.start);
+                        
+                        // Προσθήκη επισημασμένου κειμένου
+                        const tagClass = getTagClass(tag.type);
+                        html += `<span class="${tagClass} rounded px-1 py-0.5" data-start="${tag.start}" data-end="${tag.end}" data-type="${tag.type}">${text.substring(tag.start, tag.end)}</span>`;
+                        
+                        lastIndex = tag.end;
+                    }
+                    
+                    // Προσθήκη υπόλοιπου κειμένου
+                    html += text.substring(lastIndex);
+                    
+                    // Ενημέρωση του DOM
+                    document.getElementById('taggableText').innerHTML = html;
+                    
+                    // Προσθήκη event listeners για τις ετικέτες
+                    const tagElements = document.querySelectorAll('#taggableText span');
+                    tagElements.forEach(el => {
+                        el.addEventListener('click', function() {
+                            const start = parseInt(this.dataset.start);
+                            const end = parseInt(this.dataset.end);
+                            // Αφαίρεση της ετικέτας
+                            userTags = userTags.filter(tag => !(tag.start === start && tag.end === end));
+                            updateTaggableText();
+                        });
+                    });
+                } catch (error) {
+                    console.error("Σφάλμα κατά την ενημέρωση του κειμένου με ετικέτες:", error);
+                }
+            }
+
+            // Λήψη κλάσης CSS για τύπο ετικέτας
+            function getTagClass(type) {
+                switch (type) {
+                    case 'name': return 'bg-purple-100 border border-purple-300';
+                    case 'location': return 'bg-green-100 border border-green-300';
+                    case 'faith': return 'bg-yellow-100 border border-yellow-300';
+                    case 'product': return 'bg-red-100 border border-red-300';
+                    case 'parental': return 'bg-blue-100 border border-blue-300';
+                    case 'marital': return 'bg-pink-100 border border-pink-300';
+                    case 'employment': return 'bg-indigo-100 border border-indigo-300';
+                    case 'interest': return 'bg-orange-100 border border-orange-300';
+                    case 'age': return 'bg-teal-100 border border-teal-300';
+                    case 'rejection': return 'bg-gray-100 border border-gray-300';
+                    default: return 'bg-gray-100 border border-gray-300';
+                }
+            }
+
+            // Έλεγχος απάντησης
+            function checkAnswer() {
+                try {
+                    if (!currentCategory || currentScenarioIndex >= scenarios[currentCategory].length) {
+                        return;
+                    }
+                    
+                    const scenario = scenarios[currentCategory][currentScenarioIndex];
+                    const correctTags = scenario.pii;
+                    const feedbackContainer = document.getElementById('feedbackContainer');
+                    const explanationContainer = document.getElementById('explanationContainer');
+                    const explanationText = document.getElementById('explanationText');
+                    
+                    // Μετρητές για αξιολόγηση
+                    let correctCount = 0;
+                    let incorrectCount = 0;
+                    let missedCount = 0;
+                    
+                    // Έλεγχος για σωστές ετικέτες
+                    for (const userTag of userTags) {
+                        let matched = false;
+                        for (const correctTag of correctTags) {
+                            // Έλεγχος αν η ετικέτα του χρήστη ταιριάζει με μια σωστή ετικέτα
+                            if (Math.abs(userTag.start - correctTag.start) <= 2 && 
+                                Math.abs(userTag.end - correctTag.end) <= 2 && 
+                                userTag.type === correctTag.type) {
+                                correctCount++;
+                                matched = true;
+                                break;
+                            }
+                        }
+                        
+                        if (!matched) {
+                            incorrectCount++;
+                        }
+                    }
+                    
+                    // Έλεγχος για ετικέτες που παραλείφθηκαν
+                    for (const correctTag of correctTags) {
+                        let found = false;
+                        for (const userTag of userTags) {
+                            if (Math.abs(userTag.start - correctTag.start) <= 2 && 
+                                Math.abs(userTag.end - correctTag.end) <= 2 && 
+                                userTag.type === correctTag.type) {
+                                found = true;
+                                break;
+                            }
+                        }
+                        
+                        if (!found) {
+                            missedCount++;
+                        }
+                    }
+                    
+                    // Ενημέρωση δεδομένων επίδοσης
+                    if (!performanceData[currentCategory]) {
+                        performanceData[currentCategory] = { correct: 0, total: 0 };
+                    }
+                    performanceData[currentCategory].correct += correctCount;
+                    performanceData[currentCategory].total += correctTags.length;
+                    
+                    // Ενημέρωση μετρητή ολοκληρωμένων σεναρίων
+                    completedScenarios++;
+                    
+                    // Ενημέρωση γραφημάτων
+                    updatePerformanceChart();
+                    updateProgressChart();
+                    
+                    // Εμφάνιση ανατροφοδότησης
+                    let feedbackHTML = '';
+                    if (correctCount === correctTags.length && incorrectCount === 0) {
+                        feedbackHTML = `
+                            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded">
+                                <p class="font-bold">Άριστα!</p>
+                                <p>Εντοπίσατε σωστά όλα τα PII (${correctCount}/${correctTags.length}).</p>
+                            </div>
+                        `;
+                    } else {
+                        feedbackHTML = `
+                            <div class="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded">
+                                <p class="font-bold">Χρειάζεται βελτίωση</p>
+                                <p>Σωστές επισημάνσεις: ${correctCount}/${correctTags.length}</p>
+                                <p>Λανθασμένες επισημάνσεις: ${incorrectCount}</p>
+                                <p>Παραλείψεις: ${missedCount}</p>
+                            </div>
+                        `;
+                    }
+                    
+                    feedbackContainer.innerHTML = feedbackHTML;
+                    feedbackContainer.classList.remove('hidden');
+                    
+                    // Εμφάνιση επεξήγησης
+                    explanationText.innerHTML = scenario.explanation;
+                    explanationContainer.classList.remove('hidden');
+                    
+                    // Απενεργοποίηση του κουμπιού ελέγχου
+                    document.getElementById('checkAnswer').disabled = true;
+                } catch (error) {
+                    console.error("Σφάλμα κατά τον έλεγχο απάντησης:", error);
+                }
+            }
+
+            // Καθαρισμός επιλογής
+            function clearSelection() {
+                try {
+                    selectedText = "";
+                    selectedStart = -1;
+                    selectedEnd = -1;
+                    window.getSelection().removeAllRanges();
+                } catch (error) {
+                    console.error("Σφάλμα κατά τον καθαρισμό επιλογής:", error);
+                }
+            }
+
+            // Αρχικοποίηση event listeners
+            function initializeEventListeners() {
+                try {
+                    // Event listeners για κουμπιά κατηγοριών
+                    const categoryButtons = document.querySelectorAll('.category-btn');
+                    categoryButtons.forEach(button => {
+                        button.addEventListener('click', function() {
+                            const category = this.dataset.category;
+                            currentCategory = category;
+                            currentScenarioIndex = 0;
+                            loadScenario(category, 0);
+                            
+                            // Ενημέρωση UI για επιλεγμένη κατηγορία
+                            categoryButtons.forEach(btn => {
+                                btn.classList.remove('bg-blue-500', 'text-white');
+                                btn.classList.add('bg-blue-100');
+                            });
+                            this.classList.remove('bg-blue-100');
+                            this.classList.add('bg-blue-500', 'text-white');
+                        });
+                    });
+                    
+                    // Event listeners για κουμπιά πλοήγησης σεναρίων
+                    document.getElementById('prevScenario').addEventListener('click', function() {
+                        if (currentCategory && currentScenarioIndex > 0) {
+                            currentScenarioIndex--;
+                            loadScenario(currentCategory, currentScenarioIndex);
+                            document.getElementById('checkAnswer').disabled = false;
+                        }
+                    });
+                    
+                    document.getElementById('nextScenario').addEventListener('click', function() {
+                        if (currentCategory && currentScenarioIndex < scenarios[currentCategory].length - 1) {
+                            currentScenarioIndex++;
+                            loadScenario(currentCategory, currentScenarioIndex);
+                            document.getElementById('checkAnswer').disabled = false;
+                        }
+                    });
+                    
+                    // Event listeners για κουμπιά επισήμανσης
+                    document.getElementById('tagAsName').addEventListener('click', () => addTag('name'));
+                    document.getElementById('tagAsLocation').addEventListener('click', () => addTag('location'));
+                    document.getElementById('tagAsFaith').addEventListener('click', () => addTag('faith'));
+                    document.getElementById('tagAsProduct').addEventListener('click', () => addTag('product'));
+                    document.getElementById('tagAsParental').addEventListener('click', () => addTag('parental'));
+                    document.getElementById('tagAsMarital').addEventListener('click', () => addTag('marital'));
+                    document.getElementById('tagAsEmployment').addEventListener('click', () => addTag('employment'));
+                    document.getElementById('tagAsInterest').addEventListener('click', () => addTag('interest'));
+                    document.getElementById('tagAsAge').addEventListener('click', () => addTag('age'));
+                    document.getElementById('tagAsRejection').addEventListener('click', () => addTag('rejection'));
+                    document.getElementById('clearSelection').addEventListener('click', clearSelection);
+                    
+                    // Event listener για έλεγχο απάντησης
+                    document.getElementById('checkAnswer').addEventListener('click', checkAnswer);
+                } catch (error) {
+                    console.error("Σφάλμα κατά την αρχικοποίηση event listeners:", error);
+                }
+            }
+
+            // Αρχικοποίηση εφαρμογής
+            function initializeApp() {
+                try {
+                    initializeCharts();
+                    initializeEventListeners();
+                    calculateTotalScenarios();
+                } catch (error) {
+                    console.error("Σφάλμα κατά την αρχικοποίηση εφαρμογής:", error);
+                }
+            }
+
+            // Εκκίνηση εφαρμογής όταν φορτωθεί το DOM
+            document.addEventListener('DOMContentLoaded', initializeApp);
+        } catch (error) {
+            console.error("Κρίσιμο σφάλμα κατά την εκτέλεση του script:", error);
+        }
+    </script>
+</body>
+</html>
